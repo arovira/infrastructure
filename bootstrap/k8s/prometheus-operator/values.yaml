@@ -1,0 +1,137 @@
+# https://github.com/helm/charts/blob/master/stable/prometheus-operator/values.yaml 
+
+nameOverride: "prometheus-custom-metrics"
+
+fullnameOverride: "prometheus-custom-metrics"
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+coreDns:
+  enabled: false
+
+kubeDns:
+  enabled: true
+
+kubeEtcd:
+  enabled: false
+
+prometheusOperator:
+  enabled: true
+  cleanupCustomResourceBeforeInstall: true
+  cleanupCustomResource: true
+  resources: {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 200Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 100Mi
+
+prometheus:
+  enabled: true
+  ## Configuration for Prometheus service
+  ##
+  service:
+    annotations: {}
+    labels: {}
+    clusterIP: ""
+    ## List of IP addresses at which the Prometheus server service is available
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+    ##
+    externalIPs: []
+    ## Port to expose on each node
+    ## Only used if service.type is 'NodePort'
+    ##
+    nodePort: 39090
+  ingress:
+    enabled: true 
+    annotations:
+      configuration.konghq.com: strip-path
+      kubernetes.io/ingress.class: kong
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - PROMETHEUS_URL-toreplace 
+    paths:
+      - /
+    tls:
+      - secretName: PROMETHEUS_URL-toreplace-tls
+        hosts:
+        - PROMETHEUS_URL-toreplace
+  prometheusSpec:
+    image:
+      repository: prom/prometheus
+      tag: v2.9.2
+    serviceMonitorSelectorNilUsesHelmValues: false
+    retention: 30d
+    replicas: 1
+    logLevel: info
+    resources: {}
+    # limits:
+    #   cpu: 200m
+    #   memory: 200Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 100Mi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: ssd
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: STORAGE_SIZE-toreplace
+        selector: {}
+    additionalScrapeConfigs:
+    - job_name: aivenmetrics
+      scrape_interval: 1m
+      scheme: https
+      basic_auth:
+        username: AIVEN_USERNAME-toreplace
+        password:  AIVEN_PASSWORD-toreplace
+      dns_sd_configs:
+      - names:
+        - AIVEN_SERVICE-toreplace
+        type: A
+        port: 9273
+      tls_config:
+        insecure_skip_verify: true
+  additionalServiceMonitors: 
+  - name: vertx-metrics
+    selector:
+      matchLabels:
+        prometheus : vertx-metrics
+    namespaceSelector:
+      any: true
+    endpoints:
+    - interval: 5s
+      path: /metrics
+      port: micrometer-port
+      scheme: http
+  - name: kong-metrics
+    selector:
+      matchLabels:
+        app: kong
+    namespaceSelector:
+      any: true
+    endpoints:
+    - interval: 5s
+      path: /metrics
+      targetPort: kong-metrics 
+      scheme: http
+  - name: custom-metrics
+    additionalLabels: {}
+    selector:
+      matchLabels:
+        customMetrics: "true"
+    namespaceSelector:
+      any: true
+    endpoints:
+      - port: metrics
+        interval: 30s
+        path: /metrics
+        scheme: http
+

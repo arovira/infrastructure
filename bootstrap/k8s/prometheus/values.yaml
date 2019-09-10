@@ -1,0 +1,16 @@
+#https://github.com/helm/charts/blob/master/stable/prometheus/values.yaml
+alertmanager:
+  enabled: false
+
+server:
+  global:
+    scrape_interval: 10s
+  persistentVolume:
+    size: ""
+    storageClass: ssd
+#  resources:
+#    limits:
+#      cpu: 700m
+#    requests:
+#      cpu: 300m
+#      memory: 2048Mi

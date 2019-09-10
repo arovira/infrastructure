@@ -1,0 +1,22 @@
+# https://github.com/helm/charts/blob/master/stable/kong/values.yaml
+admin:
+  useTLS: false
+proxy:
+  annotations:
+    cloud.google.com/load-balancer-type: Internal
+  type: LoadBalancer
+  http:
+    enabled: false
+readinessProbe:
+  httpGet:
+    scheme: HTTP
+livenessProbe:
+  httpGet:
+    scheme: HTTP
+ingressController:
+  replicaCount: 2
+  enabled: true
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8444"
+replicaCount: 2

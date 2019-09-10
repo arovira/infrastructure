@@ -1,0 +1,12 @@
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limiting-plugin
+  labels:
+    global: "true"
+config:
+    hour: 1000
+    limit_by: ip
+    second: 10
+plugin: rate-limiting

@@ -1,0 +1,25 @@
+# Information about the cluster, to use in the cluster via a config map
+gke_project=
+cluster_name=
+cluster_description=
+node_auto_upgrade=
+node_auto_repair=
+min_application_nodes=
+max_application_nodes=
+node_machine_type=
+node_disk_size=
+ipv4_main_range=
+ipv4_pods_range=
+ipv4_services_range=
+
+# specify network region and location
+gke_region=
+# use gke_location variable to define if regional or zonal cluster, ie gke_location may be "europe-west4" for regional or "europe-west4-a" for zonal
+gke_location=
+
+# squad specific variables
+environment=
+domain=
+k8s_project_name=
+project_shortname=
+secret_location=

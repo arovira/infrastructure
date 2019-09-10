@@ -1,0 +1,8 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongIngress
+metadata:
+  name: kong-ingres-config
+route:
+  strip_path: true 
+  preserve_host: true
+

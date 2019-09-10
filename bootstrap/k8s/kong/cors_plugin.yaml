@@ -1,0 +1,15 @@
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cors-plugin
+  labels:
+    global: "true"
+config:
+    origins: "*" 
+    methods: "*" 
+    headers: "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Auth-Token"
+    exposed_headers: "X-Auth-Token"
+    credentials: "true"
+#    preflight_continue: "true"
+plugin: cors

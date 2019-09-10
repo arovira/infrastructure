@@ -1,0 +1,19 @@
+# https://github.com/helm/charts/blob/master/stable/kong/values.yaml
+admin:
+  useTLS: false
+  annotations:
+      prometheus: kong-metrics
+proxy:
+  type: LoadBalancer
+  http:
+    enabled: false
+readinessProbe:
+  httpGet:
+    scheme: HTTP
+livenessProbe:
+  httpGet:
+    scheme: HTTP
+ingressController:
+  replicaCount: 2
+  enabled: true
+replicaCount: 2

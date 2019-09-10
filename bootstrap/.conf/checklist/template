@@ -1,0 +1,7 @@
+check_helm
+cloudflare_dns
+cert_manager
+kong_ingress_public
+kong_setup prometheus_plugin 
+prometheus_operator
+zookeeper

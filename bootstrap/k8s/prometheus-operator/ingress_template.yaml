@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+#    certmanager.k8s.io/cluster-issuer: letsencrypt-ENVTOREPLACE
+    configuration.konghq.com: strip-path
+    kubernetes.io/ingress.class: kong
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app: prometheus
+  name: prometheus-ENVTOREPLACE-ingress
+  namespace: monitoring
+spec:
+  rules:
+  - host: HOSTTOREPLACE
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-operator-server
+          servicePort: 9090
+        path: /
+  tls:
+  - hosts:
+    - HOSTTOREPLACE 
+    secretName: HOSTTOREPLACE-crt-secret
+

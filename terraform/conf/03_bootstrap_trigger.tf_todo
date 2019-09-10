@@ -1,0 +1,14 @@
+resource "null_resource" "cluster-bootstrap" {
+  triggers = {
+    uuid = "${var.uuid}"
+  }
+
+  depends_on = [
+      "google_container_node_pool.node-pool"
+    ]
+
+  provisioner "local-exec" {
+    command = "echo '../bootstrap/bootstrap.sh ${var.environment} ${var.k8s_project_name}'"
+  }
+}
+
